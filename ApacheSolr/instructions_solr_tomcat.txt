@@ -1,0 +1,32 @@
+First: 
+
+tomcat/webapps has the database folder (solr_logs) -> chown tomcat:tomcat
+
+
+1. tomcat conf/server.xml modify Connector entry (search for 8080)
+
+<Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443"
+               URIEncoding="UTF-8" />
+
+2. Copy the solr war file from SOLRDIR/dist (e.g. solr-4.10.1.war) into the tomcat webapps (/var/lib/tomcat7/webapps) directory. 
+
+3. create TOMCAT_DIR/conf/Catalina/localhost/solr.xml with the following content:
+
+<Context path="/solr" docBase="TOMCAT_DIR/webapps/solr.war" debug="0" crossContext="true">
+   <Environment name="solr/home" type="java.lang.String" value="/XYZ/solr_logs" override="true"/>
+</Context>
+
+4. Copy SOLRDIR/example/lib/ext/* and SOLRDIR/example/resources/log4j.properties into TOMCAT_DIR/lib (usr/share/tomcat7/lib or in  webapps/solr/WEB-INF/lib)
+
+5. Edit the TOMCAT_DIR/lib/log4j.properties  and set the log directory for the solr log output, (replace TOMCAT_DIR ...)
+
+solr.log= /var/log/tomcat7
+
+6. restart tomcat
+
+
+
+
+
